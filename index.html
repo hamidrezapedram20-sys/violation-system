@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>دمو · سامانه ثبت تخلفات رانندگان</title>
+  <!-- Font Awesome & Vazir font -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      font-family: 'Vazir', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: #f4f7fc;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      padding: 20px;
+    }
+    .container {
+      max-width: 1200px;
+      width: 100%;
+      background: white;
+      border-radius: 28px;
+      box-shadow: 0 20px 40px rgba(0, 20, 40, 0.12);
+      padding: 30px 25px;
+      transition: 0.25s;
+    }
+    h1 {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-weight: 600;
+      font-size: 1.9rem;
+      color: #0b2a46;
+      margin-bottom: 10px;
+      border-bottom: 2px solid #e6edf5;
+      padding-bottom: 20px;
+    }
+    h1 i {
+      color: #d43f34;
+      font-size: 2rem;
+    }
+    .sub {
+      color: #3b5b7a;
+      font-weight: 400;
+      font-size: 0.95rem;
+      margin-top: -6px;
+      margin-bottom: 30px;
+      background: #eef3f9;
+      padding: 8px 18px;
+      border-radius: 40px;
+      display: inline-block;
+    }
+    .row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 25px;
+    }
+    .col-form {
+      flex: 1.2;
+      min-width: 320px;
+    }
+    .col-list {
+      flex: 2;
+      min-width: 380px;
+    }
+    .card {
+      background: #ffffff;
+      border-radius: 24px;
+      padding: 22px 20px;
+      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.04);
+      border: 1px solid #eaf0f6;
+    }
+    .card-title {
+      font-weight: 600;
+      color: #1b3a5c;
+      font-size: 1.2rem;
+      margin-bottom: 18px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .card-title i {
+      color: #c0392b;
+      width: 28px;
+      text-align: center;
+    }
+    .form-group {
+      margin-bottom: 18px;
+    }
+    label {
+      display: block;
+      font-weight: 500;
+      color: #1f405f;
+      font-size: 0.9rem;
+      margin-bottom: 5px;
+    }
+    input, select {
+      width: 100%;
+      padding: 12px 16px;
+      border: 1.5px solid #dde6ef;
+      border-radius: 16px;
+      font-size: 0.95rem;
+      background: #fafcfe;
+      transition: 0.2s;
+      font-family: 'Vazir', sans-serif;
+    }
+    input:focus, select:focus {
+      outline: none;
+      border-color: #2d6a9f;
+      box-shadow: 0 0 0 3px rgba(45, 106, 159, 0.15);
+      background: white;
+    }
+    .btn {
+      background: #1f4b74;
+      color: white;
+      border: none;
+      padding: 12px 22px;
+      border-radius: 40px;
+      font-weight: 500;
+      font-size: 1rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      cursor: pointer;
+      transition: 0.2s;
+      width: 100%;
+      justify-content: center;
+      font-family: 'Vazir', sans-serif;
+    }
+    .btn:hover {
+      background: #143753;
+      transform: scale(0.98);
+      box-shadow: 0 8px 16px rgba(0, 30, 60, 0.15);
+    }
+    .btn i {
+      font-size: 1.1rem;
+    }
+    .badge-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin: 18px 0 8px;
+    }
+    .badge {
+      background: #ecf3fa;
+      padding: 6px 16px;
+      border-radius: 40px;
+      font-size: 0.8rem;
+      color: #1e3a5a;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      border: 1px solid #d3e0ec;
+    }
+    .badge i {
+      color: #c0392b;
+    }
+    .table-wrap {
+      overflow-x: auto;
+      margin-top: 12px;
+      border-radius: 18px;
+      border: 1px solid #eef3f9;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.9rem;
+      min-width: 460px;
+    }
+    th {
+      background: #eef4fb;
+      color: #12314d;
+      font-weight: 600;
+      padding: 14px 12px;
+      text-align: center;
+      border-bottom: 2px solid #d6e2ef;
+    }
+    td {
+      padding: 14px 12px;
+      text-align: center;
+      border-bottom: 1px solid #eaf0f6;
+      background: white;
+    }
+    tr:last-child td {
+      border-bottom: none;
+    }
+    .driver-name {
+      font-weight: 500;
+      color: #0b2a46;
+    }
+    .violation-type {
+      background: #f1f6fd;
+      padding: 4px 12px;
+      border-radius: 40px;
+      font-size: 0.8rem;
+      display: inline-block;
+      color: #1f4b74;
+    }
+    .points-badge {
+      background: #1f4b74;
+      color: white;
+      border-radius: 40px;
+      padding: 2px 14px;
+      font-weight: 600;
+      font-size: 0.8rem;
+      display: inline-block;
+    }
+    .points-high {
+      background: #b33c34;
+    }
+    .points-mid {
+      background: #b8863d;
+    }
+    .empty-row td {
+      color: #8899b0;
+      padding: 30px 10px;
+      font-style: italic;
+    }
+    .total-points {
+      margin-top: 18px;
+      background: #e2ebf5;
+      padding: 14px 20px;
+      border-radius: 40px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+    .total-points span:first-child {
+      font-weight: 500;
+      color: #1f405f;
+    }
+    .total-points .num {
+      font-weight: 700;
+      font-size: 1.3rem;
+      background: #1f4b74;
+      color: white;
+      padding: 2px 20px;
+      border-radius: 40px;
+    }
+    .action-icon {
+      color: #b0c7dd;
+      cursor: pointer;
+      transition: 0.15s;
+      font-size: 1rem;
+      padding: 4px 8px;
+      border-radius: 30px;
+    }
+    .action-icon:hover {
+      background: #f0f5fd;
+      color: #c0392b;
+    }
+    .filter-section {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 15px 12px;
+      margin-top: 5px;
+    }
+    .filter-section select {
+      width: auto;
+      min-width: 160px;
+      padding: 8px 16px;
+      background: white;
+    }
+    .filter-section .btn-sm {
+      background: #e0eaf3;
+      color: #1f405f;
+      padding: 8px 16px;
+      border-radius: 40px;
+      border: none;
+      font-weight: 500;
+      cursor: pointer;
+      transition: 0.15s;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .filter-section .btn-sm:hover {
+      background: #cbdae8;
+    }
+    @media (max-width: 700px) {
+      .container { padding: 20px 15px; }
+      .col-form, .col-list { min-width: 100%; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <h1>
+    <i class="fas fa-traffic-light"></i>
+    سامانه ثبت تخلفات رانندگان
+  </h1>
+  <div class="sub">
+    <i class="fas fa-flag-checkered"></i> دمو · دسته‌بندی و امتیازدهی تخلفات
+  </div>
+
+  <div class="row">
+    <!-- بخش فرم -->
+    <div class="col-form">
+      <div class="card">
+        <div class="card-title"><i class="fas fa-pen-alt"></i> ثبت تخلف جدید</div>
+        <form id="violationForm">
+          <div class="form-group">
+            <label><i class="fas fa-user"></i> نام راننده</label>
+            <input type="text" id="driverName" placeholder="مثال: علی رضایی" required>
+          </div>
+          <div class="form-group">
+            <label><i class="fas fa-list-ul"></i> نوع تخلف</label>
+            <select id="violationType">
+              <option value="سرعت غیرمجاز" data-points="3">🚗 سرعت غیرمجاز (۳ امتیاز)</option>
+              <option value="عبور از چراغ قرمز" data-points="4">🚦 عبور از چراغ قرمز (۴ امتیاز)</option>
+              <option value="تخلف پارک" data-points="2">🅿️ تخلف پارک (۲ امتیاز)</option>
+              <option value="سبقت غیرمجاز" data-points="5">🏎️ سبقت غیرمجاز (۵ امتیاز)</option>
+              <option value="عدم توجه به تابلو" data-points="3">🛑 عدم توجه به تابلو (۳ امتیاز)</option>
+              <option value="صحبت با تلفن همراه" data-points="2">📱 صحبت با تلفن همراه (۲ امتیاز)</option>
+              <option value="نقص فنی" data-points="1">🔧 نقص فنی (۱ امتیاز)</option>
+            </select>
+          </div>
+          <button type="submit" class="btn"><i class="fas fa-plus-circle"></i> ثبت تخلف</button>
+        </form>
+
+        <div class="badge-group">
+          <span class="badge"><i class="fas fa-circle" style="color:#b33c34;"></i> سنگین (۴-۵)</span>
+          <span class="badge"><i class="fas fa-circle" style="color:#b8863d;"></i> متوسط (۳)</span>
+          <span class="badge"><i class="fas fa-circle" style="color:#2d6a9f;"></i> سبک (۱-۲)</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- بخش لیست و فیلتر -->
+    <div class="col-list">
+      <div class="card">
+        <div class="card-title" style="justify-content: space-between;">
+          <span><i class="fas fa-clipboard-list"></i> لیست تخلفات</span>
+          <span style="font-size:0.75rem; background:#eef3f9; padding:4px 14px; border-radius:40px;" id="recordCount">۰ مورد</span>
+        </div>
+
+        <!-- فیلتر -->
+        <div class="filter-section">
+          <select id="filterType">
+            <option value="all">همه تخلفات</option>
+            <option value="سرعت غیرمجاز">سرعت غیرمجاز</option>
+            <option value="عبور از چراغ قرمز">عبور از چراغ قرمز</option>
+            <option value="تخلف پارک">تخلف پارک</option>
+            <option value="سبقت غیرمجاز">سبقت غیرمجاز</option>
+            <option value="عدم توجه به تابلو">عدم توجه به تابلو</option>
+            <option value="صحبت با تلفن همراه">صحبت با تلفن همراه</option>
+            <option value="نقص فنی">نقص فنی</option>
+          </select>
+          <button class="btn-sm" id="resetFilterBtn"><i class="fas fa-undo-alt"></i> نمایش همه</button>
+        </div>
+
+        <div class="table-wrap">
+          <table id="violationTable">
+            <thead>
+              <tr>
+                <th>راننده</th>
+                <th>تخلف</th>
+                <th>امتیاز</th>
+                <th>عملیات</th>
+              </tr>
+            </thead>
+            <tbody id="tableBody">
+              <tr class="empty-row"><td colspan="4">هیچ تخلفی ثبت نشده است</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- جمع امتیازات -->
+        <div class="total-points">
+          <span><i class="fas fa-star" style="color:#f1b24a;"></i> مجموع امتیازات کلی</span>
+          <span class="num" id="totalPointsDisplay">۰</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  (function() {
+    // ----- داده‌های اولیه (دمو) -----
+    let violations = [
+      { id: 1, driver: 'سارا محمدی', type: 'سرعت غیرمجاز', points: 3 },
+      { id: 2, driver: 'رضا کریمی', type: 'عبور از چراغ قرمز', points: 4 },
+      { id: 3, driver: 'مهدی احمدی', type: 'تخلف پارک', points: 2 },
+      { id: 4, driver: 'نرگس حسینی', type: 'سبقت غیرمجاز', points: 5 },
+    ];
+    let nextId = 5;
+
+    // عناصر DOM
+    const form = document.getElementById('violationForm');
+    const driverInput = document.getElementById('driverName');
+    const typeSelect = document.getElementById('violationType');
+    const tableBody = document.getElementById('tableBody');
+    const totalPointsDisplay = document.getElementById('totalPointsDisplay');
+    const recordCount = document.getElementById('recordCount');
+    const filterSelect = document.getElementById('filterType');
+    const resetFilterBtn = document.getElementById('resetFilterBtn');
+
+    // ---- helper: دریافت امتیاز از select ----
+    function getPointsFromSelect(selectElement) {
+      const selectedOption = selectElement.options[selectElement.selectedIndex];
+      return parseInt(selectedOption.getAttribute('data-points'), 10) || 0;
+    }
+
+    // ---- رندر جدول با فیلتر ----
+    function renderTable(filterType = 'all') {
+      // فیلتر
+      let filtered = violations;
+      if (filterType !== 'all') {
+        filtered = violations.filter(v => v.type === filterType);
+      }
+
+      // نمایش تعداد
+      recordCount.textContent = `${filtered.length} مورد`;
+
+      if (filtered.length === 0) {
+        tableBody.innerHTML = `<tr class="empty-row"><td colspan="4">هیچ تخلفی مطابق فیلتر وجود ندارد</td></tr>`;
+        // آپدیت جمع امتیازات (همچنان کل)
+      } else {
+        let html = '';
+        filtered.forEach(v => {
+          // کلاس امتیاز برای رنگ
+          let pointsClass = 'points-badge';
+          if (v.points >= 4) pointsClass += ' points-high';
+          else if (v.points === 3) pointsClass += ' points-mid';
+
+          html += `
+            <tr>
+              <td class="driver-name"><i class="fas fa-user-circle" style="color:#3b6a9a; margin-left:6px;"></i> ${v.driver}</td>
+              <td><span class="violation-type">${v.type}</span></td>
+              <td><span class="${pointsClass}">${v.points}</span></td>
+              <td>
+                <span class="action-icon" data-id="${v.id}" title="حذف تخلف"><i class="fas fa-trash-alt"></i></span>
+              </td>
+            </tr>
+          `;
+        });
+        tableBody.innerHTML = html;
+
+        // اتصال رویداد حذف به دکمه‌های جدید
+        document.querySelectorAll('.action-icon[data-id]').forEach(icon => {
+          icon.addEventListener('click', function(e) {
+            const id = parseInt(this.getAttribute('data-id'), 10);
+            deleteViolation(id);
+          });
+        });
+      }
+
+      // محاسبه مجموع امتیازات (کل، بدون فیلتر)
+      const total = violations.reduce((sum, v) => sum + v.points, 0);
+      totalPointsDisplay.textContent = total;
+    }
+
+    // ---- حذف تخلف ----
+    function deleteViolation(id) {
+      violations = violations.filter(v => v.id !== id);
+      // حفظ فیلتر جاری
+      const currentFilter = filterSelect.value;
+      renderTable(currentFilter);
+    }
+
+    // ---- ثبت تخلف جدید ----
+    function addViolation(driver, type, points) {
+      const newViolation = {
+        id: nextId++,
+        driver: driver.trim(),
+        type: type,
+        points: points,
+      };
+      violations.push(newViolation);
+      // بعد از ثبت، فیلتر را روی "همه" قرار می‌دهیم تا تخلف جدید دیده شود (UX بهتر)
+      filterSelect.value = 'all';
+      renderTable('all');
+    }
+
+    // ---- مدیریت فرم ----
+    form.addEventListener('submit', function(e) {
+      e.preventDefault();
+
+      const driver = driverInput.value.trim();
+      if (!driver) {
+        alert('لطفاً نام راننده را وارد کنید.');
+        return;
+      }
+
+      const type = typeSelect.value;
+      const points = getPointsFromSelect(typeSelect);
+
+      addViolation(driver, type, points);
+
+      // پاک کردن فیلد نام
+      driverInput.value = '';
+      driverInput.focus();
+    });
+
+    // ---- فیلتر ----
+    filterSelect.addEventListener('change', function() {
+      const filterVal = this.value;
+      renderTable(filterVal);
+    });
+
+    // ---- دکمه ریست فیلتر ----
+    resetFilterBtn.addEventListener('click', function() {
+      filterSelect.value = 'all';
+      renderTable('all');
+    });
+
+    // ---- رندر اولیه ----
+    renderTable('all');
+
+    // ---- (اختیاری) اگر روی دکمه حذف کلیک شد، از قبل هندل شده ----
+    // اما برای مواردی که ممکن است بعد از رندر اولیه اضافه شوند، در renderTable مینویسیم.
+
+  })();
+</script>
+</body>
+</html>
