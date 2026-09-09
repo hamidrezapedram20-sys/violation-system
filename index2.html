@@ -1,0 +1,622 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>سامانه مدیریت امتیاز رانندگان</title>
+    <!-- Font Awesome & Vazir font -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Vazir', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f0f4fa;
+            padding: 20px;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .container {
+            max-width: 1300px;
+            width: 100%;
+            background: #ffffff;
+            border-radius: 32px;
+            box-shadow: 0 25px 50px -10px rgba(0, 20, 40, 0.2);
+            padding: 30px 28px;
+            transition: 0.2s;
+        }
+        /* هدر */
+        .header {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid #e6edf6;
+            padding-bottom: 18px;
+            margin-bottom: 24px;
+        }
+        .header h1 {
+            font-size: 1.9rem;
+            color: #0b2a46;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .header h1 i {
+            color: #c0392b;
+        }
+        .badge-status {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+        .badge-status span {
+            padding: 6px 18px;
+            border-radius: 40px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            background: #ecf3fa;
+            border: 1px solid #d3e0ec;
+        }
+        .badge-status .safe { background: #d4edda; border-color: #28a745; color: #155724; }
+        .badge-status .moderate { background: #fff3cd; border-color: #ffc107; color: #856404; }
+        .badge-status .danger { background: #f8d7da; border-color: #dc3545; color: #721c24; }
+
+        /* دو ستون */
+        .row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 28px;
+        }
+        .col-form {
+            flex: 1.2;
+            min-width: 280px;
+        }
+        .col-list {
+            flex: 2.5;
+            min-width: 400px;
+        }
+
+        /* کارت‌ها */
+        .card {
+            background: #fafcff;
+            border-radius: 24px;
+            padding: 22px 20px;
+            border: 1px solid #eaf0f6;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.02);
+            margin-bottom: 20px;
+        }
+        .card-title {
+            font-weight: 600;
+            color: #1a3958;
+            font-size: 1.15rem;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .card-title i {
+            width: 28px;
+            color: #c0392b;
+        }
+
+        /* فرم */
+        .form-group {
+            margin-bottom: 16px;
+        }
+        label {
+            display: block;
+            font-weight: 500;
+            color: #1f405f;
+            font-size: 0.9rem;
+            margin-bottom: 4px;
+        }
+        input, select {
+            width: 100%;
+            padding: 12px 16px;
+            border: 1.5px solid #dde6ef;
+            border-radius: 16px;
+            font-size: 0.95rem;
+            background: white;
+            transition: 0.2s;
+            font-family: 'Vazir', sans-serif;
+        }
+        input:focus, select:focus {
+            outline: none;
+            border-color: #2d6a9f;
+            box-shadow: 0 0 0 3px rgba(45, 106, 159, 0.12);
+        }
+        .btn {
+            background: #1f4b74;
+            color: white;
+            border: none;
+            padding: 12px 22px;
+            border-radius: 40px;
+            font-weight: 500;
+            font-size: 1rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            justify-content: center;
+            cursor: pointer;
+            transition: 0.2s;
+            width: 100%;
+            font-family: 'Vazir', sans-serif;
+        }
+        .btn:hover {
+            background: #123250;
+            transform: scale(0.98);
+            box-shadow: 0 8px 18px rgba(0, 30, 60, 0.12);
+        }
+        .btn-sm {
+            background: #e0eaf3;
+            border: none;
+            padding: 6px 14px;
+            border-radius: 30px;
+            font-weight: 500;
+            color: #1f405f;
+            cursor: pointer;
+            transition: 0.15s;
+            font-family: 'Vazir', sans-serif;
+        }
+        .btn-sm:hover {
+            background: #cbdae8;
+        }
+
+        /* جدول رانندگان */
+        .table-wrap {
+            overflow-x: auto;
+            border-radius: 18px;
+            border: 1px solid #eef3f9;
+            margin-top: 6px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.9rem;
+            min-width: 500px;
+        }
+        th {
+            background: #eef4fb;
+            color: #12314d;
+            padding: 14px 8px;
+            text-align: center;
+            border-bottom: 2px solid #d6e2ef;
+            font-weight: 600;
+        }
+        td {
+            padding: 14px 8px;
+            text-align: center;
+            border-bottom: 1px solid #eaf0f6;
+            vertical-align: middle;
+        }
+        .driver-name {
+            font-weight: 500;
+            color: #0b2a46;
+        }
+        .score-box {
+            font-weight: 700;
+            font-size: 1.1rem;
+            padding: 4px 14px;
+            border-radius: 40px;
+            display: inline-block;
+            min-width: 50px;
+        }
+        .score-safe { background: #d4edda; color: #155724; }
+        .score-moderate { background: #fff3cd; color: #856404; }
+        .score-danger { background: #f8d7da; color: #721c24; }
+
+        .status-badge {
+            padding: 4px 14px;
+            border-radius: 40px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            display: inline-block;
+        }
+        .status-safe { background: #28a74520; color: #155724; border: 1px solid #28a745; }
+        .status-moderate { background: #ffc10720; color: #856404; border: 1px solid #ffc107; }
+        .status-danger { background: #dc354520; color: #721c24; border: 1px solid #dc3545; }
+
+        .profile-btn {
+            background: #1f4b74;
+            color: white;
+            border: none;
+            padding: 6px 14px;
+            border-radius: 40px;
+            font-size: 0.75rem;
+            cursor: pointer;
+            transition: 0.15s;
+            font-family: 'Vazir', sans-serif;
+        }
+        .profile-btn:hover {
+            background: #0e2c47;
+        }
+
+        /* مودال (صفحه جزئیات) */
+        .modal-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.45);
+            backdrop-filter: blur(4px);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            padding: 20px;
+        }
+        .modal-overlay.active {
+            display: flex;
+        }
+        .modal-box {
+            max-width: 700px;
+            width: 100%;
+            background: white;
+            border-radius: 32px;
+            padding: 28px 30px;
+            box-shadow: 0 30px 60px rgba(0,0,0,0.3);
+            max-height: 90vh;
+            overflow-y: auto;
+            position: relative;
+            animation: fadeUp 0.25s ease;
+        }
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid #eef3f9;
+            padding-bottom: 14px;
+            margin-bottom: 20px;
+        }
+        .modal-header h2 {
+            font-size: 1.6rem;
+            color: #0b2a46;
+        }
+        .modal-close {
+            background: #f0f4fa;
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            font-size: 1.3rem;
+            cursor: pointer;
+            transition: 0.15s;
+            color: #1f405f;
+        }
+        .modal-close:hover {
+            background: #dce6f0;
+        }
+        .detail-score {
+            font-size: 2rem;
+            font-weight: 700;
+            margin: 12px 0 8px;
+        }
+        .detail-status {
+            font-size: 1rem;
+            padding: 6px 20px;
+            border-radius: 40px;
+            display: inline-block;
+            margin-bottom: 18px;
+        }
+        .history-list {
+            list-style: none;
+            padding: 0;
+            margin: 14px 0;
+        }
+        .history-list li {
+            background: #f8fbfe;
+            padding: 12px 16px;
+            border-radius: 16px;
+            margin-bottom: 8px;
+            display: flex;
+            justify-content: space-between;
+            border-right: 4px solid #c0392b;
+            font-size: 0.95rem;
+        }
+        .history-list .points-badge {
+            background: #1f4b74;
+            color: white;
+            padding: 2px 14px;
+            border-radius: 40px;
+            font-weight: 600;
+            font-size: 0.8rem;
+        }
+        .empty-history {
+            color: #8899b0;
+            padding: 20px 0;
+            text-align: center;
+            font-style: italic;
+        }
+
+        /* ریسپانسیو */
+        @media (max-width: 750px) {
+            .container { padding: 16px; }
+            .col-form, .col-list { min-width: 100%; }
+            .header { flex-direction: column; align-items: stretch; gap: 12px; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <!-- هدر -->
+    <div class="header">
+        <h1><i class="fas fa-id-card"></i> سامانه امتیاز رانندگان</h1>
+        <div class="badge-status">
+            <span class="safe"><i class="fas fa-check-circle"></i> بی‌خطر (۸۰-۱۰۰)</span>
+            <span class="moderate"><i class="fas fa-exclamation-triangle"></i> حاد (۵۰-۷۹)</span>
+            <span class="danger"><i class="fas fa-times-circle"></i> بحرانی (کمتر از ۵۰)</span>
+        </div>
+    </div>
+
+    <div class="row">
+        <!-- ستون فرم -->
+        <div class="col-form">
+            <div class="card">
+                <div class="card-title"><i class="fas fa-plus-circle"></i> ثبت تخلف جدید</div>
+                <form id="violationForm">
+                    <div class="form-group">
+                        <label><i class="fas fa-user"></i> نام راننده</label>
+                        <input type="text" id="driverName" placeholder="مثال: علی رضایی" required>
+                    </div>
+                    <div class="form-group">
+                        <label><i class="fas fa-list-ul"></i> نوع تخلف</label>
+                        <select id="violationType">
+                            <option value="سرعت غیرمجاز" data-points="8">🚗 سرعت غیرمجاز (۸- امتیاز)</option>
+                            <option value="عبور از چراغ قرمز" data-points="12">🚦 چراغ قرمز (۱۲- امتیاز)</option>
+                            <option value="سبقت غیرمجاز" data-points="10">🏎️ سبقت غیرمجاز (۱۰- امتیاز)</option>
+                            <option value="تخلف پارک" data-points="5">🅿️ تخلف پارک (۵- امتیاز)</option>
+                            <option value="عدم توجه به تابلو" data-points="7">🛑 عدم توجه به تابلو (۷- امتیاز)</option>
+                            <option value="صحبت با تلفن همراه" data-points="6">📱 تلفن همراه (۶- امتیاز)</option>
+                            <option value="نقص فنی" data-points="4">🔧 نقص فنی (۴- امتیاز)</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="btn"><i class="fas fa-save"></i> ثبت و کسر امتیاز</button>
+                </form>
+                <div style="margin-top: 16px; font-size: 0.85rem; color: #3b5b7a; background: #eef3f9; padding: 10px 16px; border-radius: 40px; text-align: center;">
+                    <i class="fas fa-info-circle"></i> هر راننده با ۱۰۰ امتیاز شروع می‌کند.
+                </div>
+            </div>
+
+            <!-- کارت راهنما -->
+            <div class="card" style="background:#f4f9ff;">
+                <div style="display:flex; gap:12px; flex-wrap:wrap; font-size:0.85rem;">
+                    <span><i class="fas fa-circle" style="color:#28a745;"></i> بی‌خطر</span>
+                    <span><i class="fas fa-circle" style="color:#ffc107;"></i> حاد</span>
+                    <span><i class="fas fa-circle" style="color:#dc3545;"></i> بحرانی</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- ستون لیست رانندگان -->
+        <div class="col-list">
+            <div class="card">
+                <div class="card-title" style="justify-content: space-between;">
+                    <span><i class="fas fa-users"></i> لیست رانندگان</span>
+                    <span id="driverCount" style="font-size:0.8rem; background:#eef3f9; padding:4px 16px; border-radius:40px;">۰ راننده</span>
+                </div>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>راننده</th>
+                                <th>امتیاز</th>
+                                <th>وضعیت</th>
+                                <th>جزئیات</th>
+                            </tr>
+                        </thead>
+                        <tbody id="driverTableBody">
+                            <tr class="empty-row"><td colspan="4">هیچ راننده‌ای ثبت نشده است</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- مودال جزئیات راننده -->
+<div class="modal-overlay" id="detailModal">
+    <div class="modal-box">
+        <div class="modal-header">
+            <h2 id="modalDriverName"><i class="fas fa-user-circle"></i> نام راننده</h2>
+            <button class="modal-close" id="modalCloseBtn"><i class="fas fa-times"></i></button>
+        </div>
+        <div>
+            <div class="detail-score" id="modalScore">۱۰۰</div>
+            <div class="detail-status" id="modalStatus">بی‌خطر</div>
+            <h4 style="margin: 18px 0 8px; color:#1a3958;"><i class="fas fa-history"></i> تاریخچه تخلفات</h4>
+            <ul class="history-list" id="modalHistory">
+                <li class="empty-history">تاکنون تخلفی ثبت نشده است</li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<script>
+    (function() {
+        // --- داده‌های اولیه (دمو) ---
+        let drivers = [
+            { id: 1, name: 'سارا محمدی', score: 100, violations: [] },
+            { id: 2, name: 'رضا کریمی', score: 100, violations: [] },
+            { id: 3, name: 'مهدی احمدی', score: 100, violations: [] },
+            { id: 4, name: 'نرگس حسینی', score: 100, violations: [] },
+        ];
+        let nextId = 5;
+
+        // --- عناصر DOM ---
+        const form = document.getElementById('violationForm');
+        const driverInput = document.getElementById('driverName');
+        const typeSelect = document.getElementById('violationType');
+        const tbody = document.getElementById('driverTableBody');
+        const driverCount = document.getElementById('driverCount');
+
+        // مودال
+        const modal = document.getElementById('detailModal');
+        const modalClose = document.getElementById('modalCloseBtn');
+        const modalName = document.getElementById('modalDriverName');
+        const modalScore = document.getElementById('modalScore');
+        const modalStatus = document.getElementById('modalStatus');
+        const modalHistory = document.getElementById('modalHistory');
+
+        // --- Helper: دریافت امتیاز تخلف ---
+        function getPointsFromSelect(sel) {
+            const opt = sel.options[sel.selectedIndex];
+            return parseInt(opt.getAttribute('data-points'), 10) || 0;
+        }
+
+        // --- Helper: وضعیت بر اساس امتیاز ---
+        function getStatus(score) {
+            if (score >= 80) return { label: 'بی‌خطر', class: 'status-safe', scoreClass: 'score-safe' };
+            if (score >= 50) return { label: 'حاد', class: 'status-moderate', scoreClass: 'score-moderate' };
+            return { label: 'بحرانی', class: 'status-danger', scoreClass: 'score-danger' };
+        }
+
+        // --- رندر جدول رانندگان ---
+        function renderDrivers() {
+            if (drivers.length === 0) {
+                tbody.innerHTML = `<tr class="empty-row"><td colspan="4">هیچ راننده‌ای ثبت نشده است</td></tr>`;
+                driverCount.textContent = '۰ راننده';
+                return;
+            }
+
+            let html = '';
+            drivers.forEach(d => {
+                const status = getStatus(d.score);
+                html += `
+                    <tr>
+                        <td class="driver-name"><i class="fas fa-user-circle" style="color:#2d6a9f; margin-left:6px;"></i> ${d.name}</td>
+                        <td><span class="score-box ${status.scoreClass}">${d.score}</span></td>
+                        <td><span class="status-badge ${status.class}">${status.label}</span></td>
+                        <td>
+                            <button class="profile-btn" data-id="${d.id}"><i class="fas fa-chevron-left"></i> پروفایل</button>
+                        </td>
+                    </tr>
+                `;
+            });
+            tbody.innerHTML = html;
+            driverCount.textContent = `${drivers.length} راننده`;
+
+            // اتصال رویداد به دکمه‌های پروفایل
+            document.querySelectorAll('.profile-btn[data-id]').forEach(btn => {
+                btn.addEventListener('click', function(e) {
+                    const id = parseInt(this.getAttribute('data-id'), 10);
+                    openDetail(id);
+                });
+            });
+        }
+
+        // --- باز کردن مودال جزئیات ---
+        function openDetail(driverId) {
+            const driver = drivers.find(d => d.id === driverId);
+            if (!driver) return;
+
+            modalName.innerHTML = `<i class="fas fa-user-circle"></i> ${driver.name}`;
+            modalScore.textContent = driver.score;
+
+            const status = getStatus(driver.score);
+            modalStatus.textContent = status.label;
+            modalStatus.className = `detail-status status-badge ${status.class}`;
+
+            // تاریخچه
+            if (driver.violations.length === 0) {
+                modalHistory.innerHTML = `<li class="empty-history">تاکنون تخلفی ثبت نشده است</li>`;
+            } else {
+                let historyHtml = '';
+                // نمایش از آخر به اول (جدیدترین اول)
+                const sorted = [...driver.violations].reverse();
+                sorted.forEach(v => {
+                    historyHtml += `
+                        <li>
+                            <span><i class="fas fa-exclamation-circle" style="color:#c0392b;"></i> ${v.type}</span>
+                            <span class="points-badge">-${v.points} امتیاز</span>
+                        </li>
+                    `;
+                });
+                modalHistory.innerHTML = historyHtml;
+            }
+
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        // --- بستن مودال ---
+        function closeModal() {
+            modal.classList.remove('active');
+            document.body.style.overflow = 'auto';
+        }
+
+        // --- ثبت تخلف جدید ---
+        function addViolation(driverName, type, points) {
+            // پیدا یا ساخت راننده
+            let driver = drivers.find(d => d.name.toLowerCase() === driverName.trim().toLowerCase());
+            if (!driver) {
+                driver = {
+                    id: nextId++,
+                    name: driverName.trim(),
+                    score: 100,
+                    violations: []
+                };
+                drivers.push(driver);
+            }
+
+            // کسر امتیاز (نمی‌ذاریم زیر صفر بره)
+            const newScore = Math.max(0, driver.score - points);
+            driver.score = newScore;
+
+            // ثبت تخلف در تاریخچه
+            driver.violations.push({
+                type: type,
+                points: points,
+                date: new Date().toLocaleString('fa-IR')
+            });
+
+            renderDrivers();
+        }
+
+        // --- مدیریت فرم ---
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const name = driverInput.value.trim();
+            if (!name) {
+                alert('لطفاً نام راننده را وارد کنید.');
+                return;
+            }
+
+            const type = typeSelect.value;
+            const points = getPointsFromSelect(typeSelect);
+
+            addViolation(name, type, points);
+
+            // پاک کردن فیلد
+            driverInput.value = '';
+            driverInput.focus();
+
+            // بستن مودال اگر باز باشد
+            closeModal();
+        });
+
+        // --- رویدادهای مودال ---
+        modalClose.addEventListener('click', closeModal);
+        modal.addEventListener('click', function(e) {
+            if (e.target === modal) closeModal();
+        });
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') closeModal();
+        });
+
+        // --- رندر اولیه ---
+        renderDrivers();
+    })();
+</script>
+</body>
+</html>
